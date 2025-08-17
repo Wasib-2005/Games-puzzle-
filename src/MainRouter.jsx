@@ -2,7 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import Home from "./Home/Home";
 import GamesInterface from "./Games/GamesInterface";
-import TicTacToeSetup from "./Games/TicTacToe/TicTacToeSetup";
+import GameSetup from "./Games/GameSetup";
+import TicTacToe from "./Games/TicTacToe/TicTacToe";
 
 const MainRouter = createBrowserRouter([
   {
@@ -11,7 +12,8 @@ const MainRouter = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "games-interface", element: <GamesInterface /> },
-      { path: "tic-tac-toe-setup", element: <TicTacToeSetup /> },
+      { path: "game-setup/:gameID", element: <GameSetup /> },
+      {path:"/tic-tac-toe/:modeID/:gameKey", element: <TicTacToe />},
     ],
   },
 ]);

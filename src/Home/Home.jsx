@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet"; // <-- import Helmet
 
 const Home = () => {
-  const [animationRight, setAnimationRight] = useState(false);
+  const [pageAnimation, setPageAnimation] = useState(false);
   const navigate = useNavigate();
 
   const buttonHandle = () => {
-    setAnimationRight(true);
+    setPageAnimation(true);
 
     setTimeout(() => {
       navigate("/games-interface");
-    }, 1000);
+    }, 800);
   };
 
   return (
@@ -27,8 +27,8 @@ const Home = () => {
 
       <div
         className={`${
-          animationRight
-            ? "-translate-x-1000 transition-transform duration-[1500ms]"
+          pageAnimation
+            ? "-translate-y-1000 transition-transform duration-[1500ms]"
             : ""
         } animate-fade-up animate-once grid justify-center text-center gap-9`}
       >

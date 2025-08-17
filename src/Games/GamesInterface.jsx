@@ -6,22 +6,22 @@ const GamesInterface = () => {
   const navigate = useNavigate();
 
   const [pageLoaded, setPageLoaded] = useState(false);
-  const [animationRight, setAnimationRight] = useState(false);
-
-  const gameSelectionHandle = (game) => {
-    setAnimationRight(true); // trigger animation
-
-    // wait for animation to finish before navigating
-    setTimeout(() => {
-      navigate(game);
-    }, 1000); // match your transition duration
-  };
-
   useEffect(() => {
     setTimeout(() => {
       setPageLoaded(true);
     }, 100);
   }, []);
+
+  const [pageAnimation, setPageAnimation] = useState(false);
+
+  const gameSelectionHandle = (game) => {
+    setPageAnimation(true); // trigger animation
+
+    // wait for animation to finish before navigating
+    setTimeout(() => {
+      navigate("/game-setup/" + game);
+    }, 900); // match your transition duration
+  };
 
   return (
     <>
@@ -36,8 +36,8 @@ const GamesInterface = () => {
 
       <div
         className={`text-center transition-transform duration-[1000ms] ${
-          animationRight
-            ? "-translate-x-1000 transition-transform duration-[1500ms]"
+          pageAnimation
+            ? "translate-y-1000 transition-transform duration-[1100ms]"
             : ""
         } ${pageLoaded ? "" : "translate-x-1000"}`}
       >
@@ -47,7 +47,7 @@ const GamesInterface = () => {
 
         <div className="flex justify-center items-center gap-5 border border-white p-5 rounded-4xl mt-10">
           <div
-            onClick={() => gameSelectionHandle("/tic-tac-toe-setup")}
+            onClick={() => gameSelectionHandle("tic-tac-toe")}
             className="w-[150px] grid items-center justify-center text-center hover:opacity-80 cursor-pointer transition-opacity"
           >
             <div>
@@ -57,7 +57,7 @@ const GamesInterface = () => {
           </div>
 
           <div
-            onClick={() => gameSelectionHandle("/sudoku")}
+            onClick={() => gameSelectionHandle("sudoku")}
             className="w-[150px] grid items-center justify-center text-center hover:opacity-80 cursor-pointer transition-opacity"
           >
             <div>
