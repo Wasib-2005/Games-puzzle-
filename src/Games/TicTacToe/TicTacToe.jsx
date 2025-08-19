@@ -54,7 +54,7 @@ const TicTacToe = () => {
     setIsX((prev) => !prev);
   };
 
-  // Winner check moved to useEffect to prevent double score
+  // Winner check
   useEffect(() => {
     const gameStateOnlyCellValue = gameState.map((cell) => cell.cellValue);
     let winner = null;
@@ -81,34 +81,13 @@ const TicTacToe = () => {
   const handleReset = () => {
     setPlayerOScore(0);
     setPlayerXSCore(0);
-    setGameState([
-      { cellIndex: 0, cellValue: "" },
-      { cellIndex: 1, cellValue: "" },
-      { cellIndex: 2, cellValue: "" },
-      { cellIndex: 3, cellValue: "" },
-      { cellIndex: 4, cellValue: "" },
-      { cellIndex: 5, cellValue: "" },
-      { cellIndex: 6, cellValue: "" },
-      { cellIndex: 7, cellValue: "" },
-      { cellIndex: 8, cellValue: "" },
-    ]);
+    setGameState(gameState.map((cell) => ({ ...cell, cellValue: "" })));
     setWinnerLine(null);
     setIsFinished(false);
   };
 
   const handleContinue = () => {
-    setGameState([
-      { cellIndex: 0, cellValue: "" },
-      { cellIndex: 1, cellValue: "" },
-      { cellIndex: 2, cellValue: "" },
-      { cellIndex: 3, cellValue: "" },
-      { cellIndex: 4, cellValue: "" },
-      { cellIndex: 5, cellValue: "" },
-      { cellIndex: 6, cellValue: "" },
-      { cellIndex: 7, cellValue: "" },
-      { cellIndex: 8, cellValue: "" },
-    ]);
-
+    setGameState(gameState.map((cell) => ({ ...cell, cellValue: "" })));
     setIsFinished(false);
     setWinnerLine(null);
     setIsX(true);
@@ -116,31 +95,42 @@ const TicTacToe = () => {
 
   return (
     <div
-      className={`  text-center transition-transform duration-[1000ms] ${
+      className={`text-center transition-transform duration-[1000ms] ${
         pageAnimation
           ? "-translate-x-[1000px] transition-transform duration-[1100ms]"
           : ""
       } ${pageLoaded ? "" : "translate-x-[1000px]"}`}
     >
-      <h1 className="text-4xl font-bold">Tic Tac Toe</h1>
-      <div className="md:flex flex-row-reverse gap-10 items-center ">
-        <div className="mt-8">
-          <h1 className="text-2xl font-bold">Player X : {playerXScore}</h1>
-          <h1 className="text-2xl font-bold">Player O : {playerOScore}</h1>
+      <h1 className="text-5xl font-extrabold drop-shadow-[0_0_15px_#00f7ff] mb-6">
+        ⚡ Tic Tac Toe ⚡
+      </h1>
+
+      <div className="md:flex flex-row-reverse gap-10 items-center">
+        <div className="mt-8 space-y-3">
+          <h1 className="text-2xl font-bold text-cyan-400 drop-shadow-[0_0_6px_#00f7ff]">
+            Player X : {playerXScore}
+          </h1>
+          <h1 className="text-2xl font-bold text-pink-400 drop-shadow-[0_0_6px_#ff00ff]">
+            Player O : {playerOScore}
+          </h1>
         </div>
 
         <div>
           <div className="mt-4 relative inline-block">
-            <div className="grid grid-cols-3 border-1">
+            <div className="grid grid-cols-3 border-[3px] border-gray-600 rounded-lg">
               {gameState.map((cell) => (
                 <div
                   key={cell.cellIndex}
                   onClick={() => handleCellClick(cell)}
-                  className={`border-2 w-[100px] h-[100px] flex items-center justify-center text-6xl cursor-pointer ${
-                    cell.cellValue === "" && !isFinished
-                      ? "hover:bg-gray-400"
-                      : ""
-                  }`}
+                  className={`border-[3px] border-gray-700 w-[100px] h-[100px] flex items-center justify-center text-6xl cursor-pointer transition-colors duration-200
+                    ${
+                      cell.cellValue === "" && !isFinished
+                        ? "hover:bg-gray-800/40"
+                        : ""
+                    } 
+                    ${cell.cellValue === "x" ? "text-cyan-400 drop-shadow-[0_0_10px_#00f7ff]" : ""}
+                    ${cell.cellValue === "o" ? "text-pink-400 drop-shadow-[0_0_10px_#ff00ff]" : ""}
+                  `}
                 >
                   {cell.cellValue}
                 </div>
@@ -152,7 +142,7 @@ const TicTacToe = () => {
               <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
                 {winnerLine.includes("row") && (
                   <div
-                    className={`absolute left-0 right-0 h-1 bg-red-500`}
+                    className="absolute left-0 right-0 h-1 bg-green-400 drop-shadow-[0_0_6px_#00ff15]"
                     style={{
                       top:
                         winnerLine === "row-0"
@@ -165,7 +155,7 @@ const TicTacToe = () => {
                 )}
                 {winnerLine.includes("col") && (
                   <div
-                    className={`absolute top-9 bottom-0 w-1 h-[78%] bg-red-500`}
+                    className="absolute top-9 bottom-0 w-1 h-[78%] bg-green-400 drop-shadow-[0_0_6px_#00ff15]"
                     style={{
                       left:
                         winnerLine === "col-0"
@@ -177,43 +167,36 @@ const TicTacToe = () => {
                   ></div>
                 )}
                 {winnerLine === "diag-0" && (
-                  <div className="absolute top-[50%] left-[50%] h-1 bg-red-500 rotate-45 -translate-x-1/2 -translate-y-1/2 origin-center w-[120%]" />
+                  <div className="absolute top-[50%] left-[50%] h-1 bg-green-400 drop-shadow-[0_0_6px_#00ff15] rotate-45 -translate-x-1/2 -translate-y-1/2 origin-center w-[120%]" />
                 )}
-
                 {winnerLine === "diag-1" && (
-                  <div className="absolute top-[50%] left-[50%] h-1 bg-red-500 rotate-[-45deg] -translate-x-1/2 -translate-y-1/2 origin-center w-[120%]" />
+                  <div className="absolute top-[50%] left-[50%] h-1 bg-green-400 drop-shadow-[0_0_6px_#00ff15] rotate-[-45deg] -translate-x-1/2 -translate-y-1/2 origin-center w-[120%]" />
                 )}
               </div>
             )}
           </div>
         </div>
+
         <div>
-          <h2 className="text-2xl">Player {isX ? "x" : "o"} trun</h2>
+          <h2 className="text-2xl mt-6 text-yellow-300 drop-shadow-[0_0_6px_#ffd700]">
+            Player {isX ? "X" : "O"}’s turn
+          </h2>
         </div>
       </div>
-      <div className="mt-5 md:ml-5 flex justify-center gap-4">
-        <div>
-          <button
-            onClick={handleReset}
-            className="group relative h-12 overflow-hidden overflow-x-hidden rounded-md bg-red-300 px-8 py-2 text-black font-bold"
-          >
-            <span className="relative z-10">Restart</span>
-            <span className="absolute inset-0 overflow-hidden rounded-md">
-              <span className="absolute left-0 aspect-square w-full origin-center -translate-x-full rounded-full bg-red-500 transition-all duration-500 group-hover:-translate-x-0 group-hover:scale-150"></span>
-            </span>
-          </button>
-        </div>
-        <div>
-          <button
-            onClick={handleContinue}
-            className="group relative h-12 overflow-hidden overflow-x-hidden rounded-md bg-green-300 px-8 py-2 text-black font-bold"
-          >
-            <span className="relative z-10">Continue</span>
-            <span className="absolute inset-0 overflow-hidden rounded-md">
-              <span className="absolute left-0 aspect-square w-full origin-center -translate-x-full rounded-full bg-green-400 transition-all duration-500 group-hover:-translate-x-0 group-hover:scale-150"></span>
-            </span>
-          </button>
-        </div>
+
+      <div className="mt-8 md:ml-5 flex justify-center gap-6">
+        <button
+          onClick={handleReset}
+          className="group relative h-12 rounded-md bg-red-500/80 px-8 py-2 font-bold text-white hover:bg-red-600 transition-all shadow-lg shadow-red-500/40"
+        >
+          Restart
+        </button>
+        <button
+          onClick={handleContinue}
+          className="group relative h-12 rounded-md bg-green-500/80 px-8 py-2 font-bold text-white hover:bg-green-600 transition-all shadow-lg shadow-green-500/40"
+        >
+          Continue
+        </button>
       </div>
     </div>
   );
