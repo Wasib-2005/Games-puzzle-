@@ -7,7 +7,7 @@ const GameSetup = () => {
 
   const { gameID } = useParams();
   console.log("Game ID:", gameID);
-  
+
   const [pageAnimation, setPageAnimation] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
 
@@ -26,15 +26,17 @@ const GameSetup = () => {
 
   const handleGame = (e) => {
     e.preventDefault();
-    console.log("Selected Mode:", mode, "Game ID:", gameID);
-    setPageAnimation(true);
+
     setTimeout(() => {
-      if (mode === "Offline-Mode") {
-        navigate(
-          "/" + gameID + "/" + mode.toLowerCase().replace(/-/g, "_") + "/none"
-        );
-      }
-    }, 800);
+      setPageAnimation(true);
+      setTimeout(() => {
+        if (mode === "Offline-Mode") {
+          navigate(
+            "/" + gameID + "/" + mode.toLowerCase().replace(/-/g, "_") + "/none"
+          );
+        }
+      }, 800);
+    }, 350);
   };
 
   return (

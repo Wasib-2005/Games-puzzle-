@@ -36,7 +36,11 @@ const Home = () => {
           <h1 className="text-white font-doto text-4xl md:text-6xl font-bold drop-shadow-[0_0_10px_#00f7ff] tracking-widest animate-pulse">
             Welcome to GameHub
           </h1>
+          <span className="block mt-3 text-base md:text-xl text-gray-300 font-medium italic animate-fade animate-once">
+            "Your gateway to endless fun!"
+          </span>
         </div>
+
         <div>
           <button
             onClick={buttonHandle}
