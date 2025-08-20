@@ -4,14 +4,17 @@ import { Helmet } from "react-helmet"; // <-- import Helmet
 
 const Home = () => {
   const [pageAnimation, setPageAnimation] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
   const navigate = useNavigate();
 
   const buttonHandle = () => {
-    setPageAnimation(true);
-
+    setButtonClicked(true);
     setTimeout(() => {
-      navigate("/games-interface");
-    }, 800);
+      setPageAnimation(true);
+      setTimeout(() => {
+        navigate("/games-interface");
+      }, 800);
+    }, 500);
   };
 
   return (
@@ -41,14 +44,40 @@ const Home = () => {
           </span>
         </div>
 
-        <div>
+        <div onClick={buttonHandle}>
           <button
-            onClick={buttonHandle}
-            className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-xl bg-neutral-900 px-10 md:px-12 font-bold text-white shadow-lg shadow-sky-500/50 hover:shadow-sky-400/80 transition-all duration-300"
+            onClick={() => {
+              setButtonClicked(true);
+              setTimeout(() => setButtonClicked(false), 500); // reset after animation
+            }}
+            className={`group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-xl 
+        bg-neutral-900 px-10 md:px-12 font-bold text-white shadow-lg
+        transition-all duration-300
+        ${buttonClicked ? "shadow-sky-400 scale-95" : "hover:shadow-sky-400"}
+      `}
           >
-            <span className="relative z-10 text-black">Enter</span>
-            <div className="absolute inset-0 bg-[#00ff15] group-hover:bg-sky-500/50 transition-colors duration-300 rounded-xl"></div>
-            <div className="absolute right-4 z-10 flex w-5 translate-x-[100%] opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100">
+            {/* Text */}
+            <span className="relative z-10">Enter</span>
+
+            {/* Background overlay */}
+            <div
+              className={`absolute inset-0 rounded-xl transition-colors duration-300
+          ${
+            buttonClicked ? "bg-sky-500" : "bg-[#00ff15] group-hover:bg-sky-500"
+          }
+        `}
+            ></div>
+
+            {/* Arrow icon */}
+            <div
+              className={`absolute right-4 z-10 flex w-5 transition-all duration-300
+          ${
+            buttonClicked
+              ? "translate-x-0 opacity-100"
+              : "translate-x-5 opacity-0 group-hover:translate-x-0 group-hover:opacity-100"
+          }
+        `}
+            >
               <svg
                 width={15}
                 height={15}

@@ -4,30 +4,23 @@ const TicTacToe = () => {
   const [pageAnimation, setPageAnimation] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
 
-  const [playerXScore, setPlayerXSCore] = useState(0);
+  const [playerXScore, setPlayerXScore] = useState(0);
   const [playerOScore, setPlayerOScore] = useState(0);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setPageLoaded(true);
-    }, 100);
-  }, []);
-
-  const [gameState, setGameState] = useState([
-    { cellIndex: 0, cellValue: "" },
-    { cellIndex: 1, cellValue: "" },
-    { cellIndex: 2, cellValue: "" },
-    { cellIndex: 3, cellValue: "" },
-    { cellIndex: 4, cellValue: "" },
-    { cellIndex: 5, cellValue: "" },
-    { cellIndex: 6, cellValue: "" },
-    { cellIndex: 7, cellValue: "" },
-    { cellIndex: 8, cellValue: "" },
-  ]);
+  const [gameState, setGameState] = useState(
+    Array(9)
+      .fill(null)
+      .map((_, i) => ({ cellIndex: i, cellValue: "" }))
+  );
 
   const [isX, setIsX] = useState(true);
   const [isFinished, setIsFinished] = useState(false);
   const [winnerLine, setWinnerLine] = useState(null);
+  const [winner, setWinner] = useState(null);
+
+  useEffect(() => {
+    setTimeout(() => setPageLoaded(true), 100);
+  }, []);
 
   const winningLines = [
     [0, 1, 2, "row-0"],
@@ -41,71 +34,83 @@ const TicTacToe = () => {
   ];
 
   const handleCellClick = (cell) => {
-    if (isFinished) return;
+    if (isFinished || cell.cellValue !== "") return;
 
     setGameState((prevState) =>
       prevState.map((c) =>
-        c.cellIndex === cell.cellIndex && c.cellValue === ""
+        c.cellIndex === cell.cellIndex
           ? { ...c, cellValue: isX ? "x" : "o" }
           : c
       )
     );
-
     setIsX((prev) => !prev);
   };
 
-  // Winner check
+  // Winner + draw check
   useEffect(() => {
-    const gameStateOnlyCellValue = gameState.map((cell) => cell.cellValue);
-    let winner = null;
+    const values = gameState.map((cell) => cell.cellValue);
+    let foundWinner = null;
 
     for (const [a, b, c, line] of winningLines) {
-      if (
-        gameStateOnlyCellValue[a] &&
-        gameStateOnlyCellValue[a] === gameStateOnlyCellValue[b] &&
-        gameStateOnlyCellValue[a] === gameStateOnlyCellValue[c]
-      ) {
-        winner = gameStateOnlyCellValue[a];
+      if (values[a] && values[a] === values[b] && values[a] === values[c]) {
+        foundWinner = values[a];
         setWinnerLine(line);
         break;
       }
     }
 
-    if (winner) {
+    if (foundWinner) {
+      setWinner(foundWinner);
       setIsFinished(true);
-      if (winner === "x") setPlayerXSCore((prev) => prev + 1);
+      if (foundWinner === "x") setPlayerXScore((prev) => prev + 1);
       else setPlayerOScore((prev) => prev + 1);
+
+      setTimeout(handleContinue, 1200);
+    } else if (values.every((cell) => cell !== "")) {
+      setWinner("Draw");
+      setIsFinished(true);
+      setTimeout(handleContinue, 1500);
     }
   }, [gameState]);
 
   const handleReset = () => {
     setPlayerOScore(0);
-    setPlayerXSCore(0);
-    setGameState(gameState.map((cell) => ({ ...cell, cellValue: "" })));
+    setPlayerXScore(0);
+    setGameState(
+      Array(9)
+        .fill(null)
+        .map((_, i) => ({ cellIndex: i, cellValue: "" }))
+    );
     setWinnerLine(null);
+    setWinner(null);
     setIsFinished(false);
+    setIsX(true);
   };
 
   const handleContinue = () => {
-    setGameState(gameState.map((cell) => ({ ...cell, cellValue: "" })));
-    setIsFinished(false);
+    setGameState(
+      Array(9)
+        .fill(null)
+        .map((_, i) => ({ cellIndex: i, cellValue: "" }))
+    );
     setWinnerLine(null);
+    setWinner(null);
+    setIsFinished(false);
     setIsX(true);
   };
 
   return (
     <div
       className={`text-center transition-transform duration-[1000ms] ${
-        pageAnimation
-          ? "-translate-x-[1000px] transition-transform duration-[1100ms]"
-          : ""
+        pageAnimation ? "-translate-x-[1000px]" : ""
       } ${pageLoaded ? "" : "translate-x-[1000px]"}`}
     >
-      <h1 className="text-5xl font-extrabold drop-shadow-[0_0_15px_#00f7ff] mb-6">
+      <h1 className="text-3xl md:text-5xl font-extrabold drop-shadow-[0_0_15px_#00f7ff] mb-6">
         ⚡ Tic Tac Toe ⚡
       </h1>
 
       <div className="md:flex flex-row-reverse gap-10 items-center">
+        {/* Scoreboard */}
         <div className="mt-8 space-y-3">
           <h1 className="text-2xl font-bold text-cyan-400 drop-shadow-[0_0_6px_#00f7ff]">
             Player X : {playerXScore}
@@ -115,8 +120,9 @@ const TicTacToe = () => {
           </h1>
         </div>
 
+        {/* Board */}
         <div>
-          <div className="mt-4 relative inline-block">
+          <div className="mt-4 md:mr-4 relative inline-block">
             <div className="grid grid-cols-3 border-[3px] border-gray-600 rounded-lg">
               {gameState.map((cell) => (
                 <div
@@ -128,8 +134,16 @@ const TicTacToe = () => {
                         ? "hover:bg-gray-800/40"
                         : ""
                     } 
-                    ${cell.cellValue === "x" ? "text-cyan-400 drop-shadow-[0_0_10px_#00f7ff]" : ""}
-                    ${cell.cellValue === "o" ? "text-pink-400 drop-shadow-[0_0_10px_#ff00ff]" : ""}
+                    ${
+                      cell.cellValue === "x"
+                        ? "text-cyan-400 drop-shadow-[0_0_10px_#00f7ff]"
+                        : ""
+                    }
+                    ${
+                      cell.cellValue === "o"
+                        ? "text-pink-400 drop-shadow-[0_0_10px_#ff00ff]"
+                        : ""
+                    }
                   `}
                 >
                   {cell.cellValue}
@@ -177,23 +191,45 @@ const TicTacToe = () => {
           </div>
         </div>
 
+        {/* Turn indicator */}
         <div>
-          <h2 className="text-2xl mt-6 text-yellow-300 drop-shadow-[0_0_6px_#ffd700]">
-            Player {isX ? "X" : "O"}’s turn
-          </h2>
+          {!isFinished ? (
+            <h2
+              className={`text-2xl mt-6 ${
+                isX ? " text-cyan-400" : " text-pink-400 "
+              }  drop-shadow-[0_0_6px_#ffd700]`}
+            >
+              Player {isX ? "X" : "O"}’s turn
+            </h2>
+          ) : (
+            <h2
+              className={`text-2xl mt-6 font-bold ${
+                winner === "x"
+                  ? "text-cyan-400 drop-shadow-[0_0_6px_#00f7ff]"
+                  : winner === "o"
+                  ? "text-pink-400 drop-shadow-[0_0_6px_#ff00ff]"
+                  : "text-gray-300"
+              }`}
+            >
+              {winner === "Draw"
+                ? "It's a Draw!"
+                : ` Winner: ${winner.toUpperCase()} `}
+            </h2>
+          )}
         </div>
       </div>
 
+      {/* Controls */}
       <div className="mt-8 md:ml-5 flex justify-center gap-6">
         <button
           onClick={handleReset}
-          className="group relative h-12 rounded-md bg-red-500/80 px-8 py-2 font-bold text-white hover:bg-red-600 transition-all shadow-lg shadow-red-500/40"
+          className="h-12 rounded-md bg-red-500/80 px-8 py-2 font-bold text-white hover:bg-red-600 transition-all shadow-lg shadow-red-500/40"
         >
           Restart
         </button>
         <button
           onClick={handleContinue}
-          className="group relative h-12 rounded-md bg-green-500/80 px-8 py-2 font-bold text-white hover:bg-green-600 transition-all shadow-lg shadow-green-500/40"
+          className="h-12 rounded-md bg-green-500/80 px-8 py-2 font-bold text-white hover:bg-green-600 transition-all shadow-lg shadow-green-500/40"
         >
           Continue
         </button>

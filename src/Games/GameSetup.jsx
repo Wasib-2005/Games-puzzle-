@@ -34,6 +34,12 @@ const GameSetup = () => {
           navigate(
             "/" + gameID + "/" + mode.toLowerCase().replace(/-/g, "_") + "/none"
           );
+        } else if (mode === "Public-Mode") {
+          navigate("*");
+        } else if (mode === "Private-Mode") {
+          navigate(
+            "*"
+          );
         }
       }, 800);
     }, 350);
@@ -50,14 +56,17 @@ const GameSetup = () => {
       <form>
         <div>
           <h4>
-            <Label className="text-3xl font-bold" htmlFor="game-mode">
+            <Label
+              className="text-3xl md:text-4xl font-bold"
+              htmlFor="game-mode"
+            >
               Game Mode Selection
             </Label>
           </h4>
           <hr className="my-5 border-dashed" />
-          <h4 className="text-2xl mt-2">Game Name: {gameName}</h4>
+          <h4 className="text-xl md:text-2xl mt-2">Game Name: {gameName}</h4>
         </div>
-        <div className="flex items-center justify-between w-[250px] mt-12">
+        <div className="flex items-center justify-around mt-12 md:text-2xl">
           <p>Game Mode:</p>
           <div className="w-[100px]">
             <Select
@@ -89,10 +98,10 @@ const GameSetup = () => {
             variant="outlined"
             label="Key"
             color="default"
-            className="!bg-black "
+            className="!bg-black"
           />
         </div>
-        <div className="mt-6 flex items-center justify-center text-black">
+        <div className="mt-12 flex items-center justify-center text-black">
           <button onClick={handleGame} className="cssbuttons-io-button">
             <p>{mode === "Public-Mode" ? "Find" : "Start"}</p>
             <div className="icon">
