@@ -69,3 +69,48 @@
 .cssbuttons-io-button:active .icon {
   transform: scale(0.95);
 }
+
+.glassmorphism {
+  background: rgba(10,10,10,0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.shadow-neon {
+  box-shadow: 0 0 20px rgba(128,0,255,0.6), 0 0 40px rgba(0,255,255,0.4);
+}
+
+.btn-neon {
+  background: linear-gradient(90deg, #ff00ff, #00ffff);
+  color: white;
+  font-weight: bold;
+  padding: 0.5rem 1.5rem;
+  border-radius: 12px;
+  text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
+  transition: all 0.2s;
+}
+.btn-neon:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 20px #ff00ff, 0 0 30px #00ffff;
+}
+
+.btn-correct {
+  background: #00ff88;
+  text-shadow: 0 0 10px #00ff88;
+}
+
+.btn-wrong {
+  background: #ff0055;
+  text-shadow: 0 0 10px #ff0055;
+}
+
+.btn-disabled {
+  background: rgba(255,255,255,0.1);
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.text-neon-glow {
+  color: #00ffff;
+  text-shadow: 0 0 5px #00ffff, 0 0 15px #00ffff;
+}

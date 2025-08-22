@@ -5,6 +5,7 @@ import GamesInterface from "./Games/GamesInterface";
 import GameSetup from "./Games/GameSetup";
 import TicTacToe from "./Games/TicTacToe/TicTacToe";
 import ErrorCommingSoon from "./ErrorCommingSoon";
+import Quiz from "./Games/Quiz/Quiz";
 
 const MainRouter = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ const MainRouter = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "games-interface", element: <GamesInterface /> },
       { path: "game-setup/:gameID", element: <GameSetup /> },
+      { path: "quiz", element: <Quiz /> },
       { path: "/tic-tac-toe/:modeID/:gameKey", element: <TicTacToe /> },
       { path: "/sudoku/:modeID/:gameKey", element: <ErrorCommingSoon /> }, // Placeholder for Sudoku
       { path: "*", element: <ErrorCommingSoon /> },
