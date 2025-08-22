@@ -67,7 +67,7 @@ const GamesInterface = () => {
           </div>
 
           <div
-            onClick={() => gameSelectionHandle("sudoku")}
+            onClick={() => navigate("/sudoku")}
             className="w-[150px] grid items-center justify-center text-center hover:opacity-80 cursor-pointer transition-opacity"
           >
             <div>

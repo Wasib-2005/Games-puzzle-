@@ -4,7 +4,7 @@ const QuizQuestion = ({ questionData, index, selectedAnswer, handleAnswerSelect 
   const isAnswered = selectedAnswer !== undefined;
 
   return (
-    <div className="glassmorphism p-6 rounded-2xl shadow-neon min-w-[400px] flex flex-col gap-5">
+    <div className="glassmorphism p-6 rounded-2xl shadow-neon w-[300px] md:w-auto flex flex-col gap-5">
       <p className="text-xl font-semibold text-white drop-shadow-neon">
         {index + 1}. {questionData.question}
       </p>
