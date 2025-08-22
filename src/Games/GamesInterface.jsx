@@ -45,7 +45,7 @@ const GamesInterface = () => {
           Select a game
         </h1>
 
-        <div className="flex justify-center items-center gap-5 border border-white p-5 rounded-4xl mt-10">
+        <div className="grid grid-cols-2  justify-center items-center gap-5 border border-white p-5 rounded-4xl mt-10">
           <div
             onClick={() => navigate("/quiz")}
             className="w-[150px] grid items-center justify-center text-center hover:opacity-80 cursor-pointer transition-opacity"

@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
 @import "tailwindcss";
 @plugin "flowbite-react/plugin/tailwindcss";
 @source "../.flowbite-react/class-list.json";
@@ -14,6 +15,14 @@
   font-variation-settings:
     "ROND" 100;
 }
+
+.roboto-slab-700 {
+  font-family: "Roboto Slab", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
 
 /* From Uiverse.io by adamgiebl */ 
 .cssbuttons-io-button {

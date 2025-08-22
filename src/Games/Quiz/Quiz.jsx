@@ -11,12 +11,13 @@ const Quiz = () => {
   const [topic, setTopic] = useState("");
   const [subtopic, setSubtopic] = useState("");
   const [difficulty, setDifficulty] = useState("easy");
+  const [numQuestions, setNumQuestions] = useState(5); // default 5 questions
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(null);
   const [playerScore, setPlayerScore] = useState(0);
-  const [quizFinished, setQuizFinished] = useState(false); // new
+  const [quizFinished, setQuizFinished] = useState(false);
 
   useEffect(() => {
     axios
@@ -43,6 +44,7 @@ const Quiz = () => {
         topic,
         subtopic,
         difficulty,
+        numQuestions,
       });
       setQuestions(res.data);
       setCurrentQuestionIndex(0);
@@ -63,7 +65,7 @@ const Quiz = () => {
     setTimeout(() => {
       if (qIndex + 1 >= questions.length) {
         setCurrentQuestionIndex(null);
-        setQuizFinished(true); // quiz is finished
+        setQuizFinished(true);
       } else {
         setCurrentQuestionIndex((prev) => prev + 1);
       }
@@ -71,23 +73,30 @@ const Quiz = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen p-6 text-red-100">
-      {/* Title */}
-      <h1 className="text-5xl font-extrabold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-blue-400 drop-shadow-neon animate-pulse">
-        🤖 AI Quiz Terminal
+    <div className="flex flex-col justify-center items-center p-6 text-red-100 roboto-slab-700">
+      <h1 className="text-3xl md:text-5xl font-extrabold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-blue-400 drop-shadow-neon animate-pulse font-doto">
+        Quiz Terminal
       </h1>
 
-      <div className="glassmorphism p-6 rounded-2xl min-w-[450px] flex justify-center items-center shadow-neon">
+      <div
+        className={`glassmorphism p-6 rounded-2xl flex justify-center items-center shadow-neon ${
+          quizFinished
+            ? "w-[300px] md:w-[700px] lg:w-[1000px]"
+            : currentQuestionIndex !== null
+            ? ""
+            : "w-[300px] md:w-[400px] lg:w-[500px]"
+        } transition-all duration-500`}
+      >
         {/* Quiz Form */}
         {currentQuestionIndex === null && !quizFinished && (
           <form
             className="flex flex-col gap-5 w-full max-w-md"
             onSubmit={handleSubmit}
           >
-            {/* Topic, Subtopic, Difficulty select (unchanged) */}
+            {/* Topic */}
             <div>
               <div className="flex justify-between">
-                <label className="text-lg font-bold mb-1">Topic :</label>
+                <label className="text-lg font-bold mb-1">Topic</label>
                 <Select
                   value={topic}
                   onChange={(e) => {
@@ -118,8 +127,9 @@ const Quiz = () => {
               </div>
             </div>
 
+            {/* Subtopic */}
             <div className="flex justify-between">
-              <label className="text-lg font-semibold mb-1">Subtopic :</label>
+              <label className="text-lg font-semibold mb-1">Subtopic </label>
               <Select
                 value={subtopic}
                 onChange={(e) => setSubtopic(e.target.value)}
@@ -144,33 +154,34 @@ const Quiz = () => {
               </Select>
             </div>
 
+            {/* Difficulty */}
             <div className="flex justify-between">
-              <label className="text-lg font-semibold mb-1">Difficulty :</label>
+              <label className="text-lg font-semibold mb-1">Difficulty </label>
               <Select
                 value={difficulty}
                 onChange={(e) => setDifficulty(e.target.value)}
                 className="!bg-black !text-white !border-gray-700 !focus:border-primary-500 !focus:ring-primary-500 w-[60%]"
                 style={{ backgroundColor: "black", color: "white" }}
               >
-                <option
-                  value="easy"
-                  style={{ backgroundColor: "black", color: "white" }}
-                >
-                  Easy
-                </option>
-                <option
-                  value="medium"
-                  style={{ backgroundColor: "black", color: "white" }}
-                >
-                  Medium
-                </option>
-                <option
-                  value="hard"
-                  style={{ backgroundColor: "black", color: "white" }}
-                >
-                  Hard
-                </option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
               </Select>
+            </div>
+
+            {/* Number of Questions */}
+            <div className="flex justify-between">
+              <label className="text-lg font-semibold mb-1">
+                Quantity
+              </label>
+              <input
+                type="number"
+                min="1"
+                max="20"
+                value={numQuestions}
+                onChange={(e) => setNumQuestions(Number(e.target.value))}
+                className="!bg-black !text-white !border-gray-700 !focus:border-primary-500 !focus:ring-primary-500 w-[60%] px-2 py-1 rounded"
+              />
             </div>
 
             <button type="submit" disabled={loading} className="btn-neon">
@@ -189,6 +200,7 @@ const Quiz = () => {
           />
         )}
 
+        {/* Final Result */}
         {quizFinished && (
           <FinalResult
             questions={questions}
@@ -197,18 +209,7 @@ const Quiz = () => {
           />
         )}
       </div>
-
-      {/* Score */}
-      {playerScore !== null && !quizFinished && (
-        <p className="mt-6 text-2xl font-extrabold text-neon-glow animate-pulse">
-          Score: {playerScore}/{questions.length}
-        </p>
-      )}
-      {quizFinished && (
-        <p className="mt-6 text-2xl font-extrabold text-neon-glow animate-pulse">
-          Final Score: {playerScore}/{questions.length}
-        </p>
-      )}
+      <div className="mt-[50px]"/>
     </div>
   );
 };
