@@ -23,7 +23,7 @@ const FinalResult = ({ questions = [], selectedAnswers = [], playerScore = 0 }) 
         return (
           <div
             key={i}
-            className="glassmorphism p-2 md:p-4 rounded-2xl shadow-neon flex flex-col gap-2 w-full"
+            className="glassmorphism p-2 md:p-4 rounded-2xl  flex flex-col gap-2 w-full text-left"
           >
             <p className="text-lg font-semibold text-white drop-shadow-neon">
               {i + 1}. {q.question}
@@ -46,7 +46,7 @@ const FinalResult = ({ questions = [], selectedAnswers = [], playerScore = 0 }) 
             )}
 
             {q.explanation && (
-              <p className="text-sm text-yellow-300">
+              <p className="text-sm text-gray-500">
                 Explanation: {q.explanation}
               </p>
             )}

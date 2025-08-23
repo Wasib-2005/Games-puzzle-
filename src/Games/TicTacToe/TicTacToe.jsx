@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import TicTacToeBoard from "./TicTacToeBoard";
+import { Helmet } from "react-helmet-async";
 
 const TicTacToe = () => {
   const [pageAnimation, setPageAnimation] = useState(false);
@@ -105,6 +107,14 @@ const TicTacToe = () => {
         pageAnimation ? "-translate-x-[1000px]" : ""
       } ${pageLoaded ? "" : "translate-x-[1000px]"}`}
     >
+      <Helmet>
+        <title>GameHub | Tic Tac Toe</title>
+        <meta
+          name="description"
+          content="Welcome to GameHub, select and play your favorite games!"
+        />
+        <meta name="keywords" content="games, Tic Tac Toe, Sudoku, GameHub" />
+      </Helmet>
       <h1 className="text-3xl md:text-5xl font-extrabold drop-shadow-[0_0_15px_#00f7ff] mb-6">
         ⚡ Tic Tac Toe ⚡
       </h1>
@@ -123,31 +133,14 @@ const TicTacToe = () => {
         {/* Board */}
         <div>
           <div className="mt-4 md:mr-4 relative inline-block">
-            <div className="grid grid-cols-3 border-[3px] border-gray-600 rounded-lg">
+            <div className="grid grid-cols-3  rounded-lg">
               {gameState.map((cell) => (
-                <div
+                <TicTacToeBoard
                   key={cell.cellIndex}
-                  onClick={() => handleCellClick(cell)}
-                  className={`border-[3px] border-gray-700 w-[100px] h-[100px] flex items-center justify-center text-6xl cursor-pointer transition-colors duration-200
-                    ${
-                      cell.cellValue === "" && !isFinished
-                        ? "hover:bg-gray-800/40"
-                        : ""
-                    } 
-                    ${
-                      cell.cellValue === "x"
-                        ? "text-cyan-400 drop-shadow-[0_0_10px_#00f7ff]"
-                        : ""
-                    }
-                    ${
-                      cell.cellValue === "o"
-                        ? "text-pink-400 drop-shadow-[0_0_10px_#ff00ff]"
-                        : ""
-                    }
-                  `}
-                >
-                  {cell.cellValue}
-                </div>
+                  cell={cell}
+                  isFinished={isFinished}
+                  handleCellClick={handleCellClick}
+                />
               ))}
             </div>
 

@@ -80,46 +80,84 @@
 }
 
 .glassmorphism {
-  background: rgba(10,10,10,0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(15, 25, 45, 0.5); /* dark, semi-transparent base */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  color: white;
 }
+
 
 .shadow-neon {
   box-shadow: 0 0 20px rgba(128,0,255,0.6), 0 0 40px rgba(0,255,255,0.4);
 }
 
-.btn-neon {
-  background: linear-gradient(90deg, #ff00ff, #00ffff);
-  color: white;
-  font-weight: bold;
-  padding: 0.5rem 1.5rem;
+/* Universal style for option buttons */
+.btn-neon,
+.btn-correct,
+.btn-wrong,
+.btn-disabled {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  height: 3rem;
+  padding: 0 1.5rem;
   border-radius: 12px;
-  text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
-  transition: all 0.2s;
+  font-weight: bold;
+  text-align: center;
+  box-sizing: border-box;
+  /* Remove border */
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+
+/* Default option */
+.btn-neon {
+  background: linear-gradient(45deg, #6a00ff, #00cfff);
+  color: white;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+}
+
+/* Hover glow */
 .btn-neon:hover {
   transform: scale(1.05);
-  text-shadow: 0 0 20px #ff00ff, 0 0 30px #00ffff;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
 }
 
+/* Correct answer */
 .btn-correct {
   background: #00ff88;
-  text-shadow: 0 0 10px #00ff88;
+  color: black;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
 }
 
+.btn-correct:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+}
+
+/* Wrong answer */
 .btn-wrong {
   background: #ff0055;
-  text-shadow: 0 0 10px #ff0055;
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 0, 85, 0.6);
 }
 
+.btn-wrong:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 0, 85, 0.8);
+}
+
+/* Disabled buttons (after submission) */
 .btn-disabled {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   color: #aaa;
+  border: 2px solid rgba(255, 255, 255, 0.1);
   cursor: not-allowed;
-}
-
-.text-neon-glow {
-  color: #00ffff;
-  text-shadow: 0 0 5px #00ffff, 0 0 15px #00ffff;
+  transform: none;
+  box-shadow: none;
 }

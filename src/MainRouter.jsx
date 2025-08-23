@@ -14,8 +14,8 @@ const MainRouter = createBrowserRouter([
     element: <App />,
     children: [
       { path: "/", element: <Home /> },
-      { path: "games-interface", element: <GamesInterface /> },
-      { path: "game-setup/:gameID", element: <GameSetup /> },
+      { path: "/games-interface", element: <GamesInterface /> },
+      { path: "/game-setup/:gameID", element: <GameSetup /> },
       { path: "/tic-tac-toe/:modeID/:gameKey", element: <TicTacToe /> },
       { path: "/sudoku", element: <Sudoku /> }, // Placeholder for Sudoku
       {path: "/quiz", element: <Quiz />}, // Placeholder for Quiz

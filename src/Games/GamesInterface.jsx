@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet"; // make sure Helmet is imported
+import { Helmet } from "react-helmet-async";
 
 const GamesInterface = () => {
+  useEffect(() => {
+    document.title = "GameHub | Select a Game (Debug)";
+  }, []);
+
   const navigate = useNavigate();
 
   const [pageLoaded, setPageLoaded] = useState(false);
@@ -19,21 +23,12 @@ const GamesInterface = () => {
 
     // wait for animation to finish before navigating
     setTimeout(() => {
-      navigate("/game-setup/" + game);
+      navigate(game);
     }, 900); // match your transition duration
   };
 
   return (
-    <>
-      <Helmet>
-        <title>GameHub | Select a Game</title>
-        <meta
-          name="description"
-          content="Welcome to GameHub, select and play your favorite games!"
-        />
-        <meta name="keywords" content="games, Tic Tac Toe, Sudoku, GameHub" />
-      </Helmet>
-
+    <div>
       <div
         className={`text-center transition-transform duration-[1000ms] ${
           pageAnimation
@@ -41,13 +36,13 @@ const GamesInterface = () => {
             : ""
         } ${pageLoaded ? "" : "translate-x-1000"}`}
       >
-        <h1 className="text-white font-doto text-3xl md:text-4xl font-bold drop-shadow-[0_0_10px_#00f7ff] tracking-widest animate-pulse">
+        <h1 className="text-white font-doto text-4xl md:text-6xl font-bold drop-shadow-[0_0_10px_#00f7ff] tracking-widest animate-pulse">
           Select a game
         </h1>
 
-        <div className="grid grid-cols-2  justify-center items-center gap-5 border border-white p-5 rounded-4xl mt-10">
+        <div className="grid grid-cols-2 md:grid-cols-4  justify-center items-center gap-5 md:gap-12 border border-white p-5 rounded-4xl mt-10 md:text-xl">
           <div
-            onClick={() => navigate("/quiz")}
+            onClick={() => gameSelectionHandle("/quiz")}
             className="w-[150px] grid items-center justify-center text-center hover:opacity-80 cursor-pointer transition-opacity"
           >
             <div>
@@ -57,7 +52,7 @@ const GamesInterface = () => {
           </div>
 
           <div
-            onClick={() => gameSelectionHandle("tic-tac-toe")}
+            onClick={() => gameSelectionHandle("/tic-tac-toe/offline_mode/none")}
             className="w-[150px] grid items-center justify-center text-center hover:opacity-80 cursor-pointer transition-opacity"
           >
             <div>
@@ -67,7 +62,7 @@ const GamesInterface = () => {
           </div>
 
           <div
-            onClick={() => navigate("/sudoku")}
+            onClick={() => gameSelectionHandle("/sudoku")}
             className="w-[150px] grid items-center justify-center text-center hover:opacity-80 cursor-pointer transition-opacity"
           >
             <div>
@@ -75,9 +70,14 @@ const GamesInterface = () => {
             </div>
             <p>Sudoku</p>
           </div>
+          <div className="w-[150px] h-full border rounded-2xl bg-gray-300 text-black grid items-center justify-center text-center hover:opacity-80 cursor-pointer transition-opacity">
+            <div>
+              <p className="text-3xl">More comming soon</p>
+            </div>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

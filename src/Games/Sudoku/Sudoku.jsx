@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 // --- Sudoku utility functions ---
-const clone = (board) => board.map(row => [...row]);
+const clone = (board) => board.map((row) => [...row]);
 const shuffle = (arr) => {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -55,7 +55,7 @@ const generateFull = () => {
     const empty = findEmpty(board);
     if (!empty) return true;
     const { r, c } = empty;
-    for (const n of shuffle(range(9).map(i => i + 1))) {
+    for (const n of shuffle(range(9).map((i) => i + 1))) {
       if (isSafe(board, r, c, n)) {
         board[r][c] = n;
         if (fill()) return true;
@@ -86,9 +86,13 @@ const makePuzzle = (solution, holes = 45) => {
 
 // --- Sudoku Component ---
 export default function Sudoku() {
-  const [board, setBoard] = useState(Array.from({ length: 9 }, () => Array(9).fill(0)));
+  const [board, setBoard] = useState(
+    Array.from({ length: 9 }, () => Array(9).fill(0))
+  );
   const [solution, setSolution] = useState(null);
-  const [fixed, setFixed] = useState(Array.from({ length: 9 }, () => Array(9).fill(false)));
+  const [fixed, setFixed] = useState(
+    Array.from({ length: 9 }, () => Array(9).fill(false))
+  );
   const [selected, setSelected] = useState(null);
   const [mistakes, setMistakes] = useState(new Set());
   const [won, setWon] = useState(false);
@@ -98,23 +102,25 @@ export default function Sudoku() {
     const puzz = makePuzzle(full, 45);
     setBoard(puzz);
     setSolution(full);
-    setFixed(puzz.map(row => row.map(v => v !== 0)));
+    setFixed(puzz.map((row) => row.map((v) => v !== 0)));
     setSelected(null);
     setMistakes(new Set());
     setWon(false);
   };
 
-  useEffect(() => { restart(); }, []);
+  useEffect(() => {
+    restart();
+  }, []);
 
   const setCell = (r, c, val) => {
     if (fixed[r][c]) return;
-    setBoard(prev => {
+    setBoard((prev) => {
       const next = clone(prev);
       next[r][c] = val;
       return next;
     });
     const key = `${r},${c}`;
-    setMistakes(prev => {
+    setMistakes((prev) => {
       const next = new Set(prev);
       if (val === 0) next.delete(key);
       else if (solution && val !== solution[r][c]) next.add(key);
@@ -124,10 +130,11 @@ export default function Sudoku() {
   };
 
   const onKeyDown = (e, r, c) => {
-    if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') return;
+    if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "Delete")
+      return;
     e.preventDefault();
     if (fixed[r][c]) return;
-    if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') {
+    if (e.key === "Backspace" || e.key === "Delete" || e.key === "0") {
       setCell(r, c, 0);
       return;
     }
@@ -146,33 +153,129 @@ export default function Sudoku() {
     }
   };
 
-  const solveNow = () => { if (!solution) return; setBoard(clone(solution)); setMistakes(new Set()); setWon(true); };
-  const resetBoard = () => { setBoard(prev => prev.map((row, r) => row.map((_, c) => (fixed[r][c] ? prev[r][c] : 0)))); setSelected(null); setMistakes(new Set()); setWon(false); };
-  const related = (r, c) => selected && (r===selected.r||c===selected.c||(Math.floor(r/3)===Math.floor(selected.r/3)&&Math.floor(c/3)===Math.floor(selected.c/3)));
+  const solveNow = () => {
+    if (!solution) return;
+    setBoard(clone(solution));
+    setMistakes(new Set());
+    setWon(true);
+  };
+  const resetBoard = () => {
+    setBoard((prev) =>
+      prev.map((row, r) => row.map((_, c) => (fixed[r][c] ? prev[r][c] : 0)))
+    );
+    setSelected(null);
+    setMistakes(new Set());
+    setWon(false);
+  };
+  const [pageAnimation, setPageAnimation] = useState(false);
+
+  const [pageLoaded, setPageLoaded] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setPageLoaded(true);
+    }, 100);
+  }, []);
 
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen py-10 text-white">
-      <h1 className="text-4xl font-bold mb-6 drop-shadow-lg">🧩 Sudoku</h1>
-      <div className="grid grid-cols-9 gap-1 p-2 rounded-2xl bg-white/10 border border-white/30 backdrop-blur-md">
-        {board.map((row, r) => (
-          <React.Fragment key={r}>
-            {row.map((val, c) => (
-              <div key={`${r}-${c}`} tabIndex={0} onKeyDown={e=>onKeyDown(e,r,c)} onClick={()=>setSelected({r,c})}
-                className={`w-9 h-9 md:w-12 md:h-12  flex items-center justify-center rounded-lg text-lg font-semibold border backdrop-blur-md transition ${fixed[r][c]?'bg-gray-800 text-gray-200':'bg-gray-700 text-white'} ${selected&&selected.r===r&&selected.c===c?'ring-2 ring-purple-400':''} ${mistakes.has(`${r},${c}`)?'bg-red-600/70 ring-2 ring-red-400':''}`}
-              >
-                {fixed[r][c]?val||'' : <input className="w-full h-full text-center bg-transparent outline-none" inputMode="numeric" maxLength={1} value={val===0?'':String(val)} onChange={e=>{const raw=e.target.value.replace(/[^1-9]/g,''); setCell(r,c,raw?parseInt(raw,10):0);}} onFocus={()=>setSelected({r,c})}/>}</div>
-            ))}
-          </React.Fragment>
-        ))}
+    <div
+      className={`flex flex-col justify-center items-center p-6 roboto-slab-700 transition-transform duration-[1000ms] ${
+        pageAnimation
+          ? "translate-y-1000 transition-transform duration-[1100ms]"
+          : ""
+      } ${pageLoaded ? "" : "-translate-y-1000"}`}
+    >
+      <div className="flex flex-col items-center justify-start min-h-screen py-10 text-white">
+        <h1 className="text-4xl font-bold mb-6 drop-shadow-lg">🧩 Sudoku</h1>
+        <div className="grid grid-cols-9 gap-0 bg-white/10 border-4 border-gray-500 rounded-lg">
+          {board.map((row, r) => (
+            <React.Fragment key={r}>
+              {row.map((val, c) => {
+                const borderClasses = `
+                border
+                ${r % 3 === 0 ? "border-t-4" : ""}
+                ${c % 3 === 0 ? "border-l-4" : ""}
+                ${r === 8 ? "border-b-4" : ""}
+                ${c === 8 ? "border-r-4" : ""}
+                border-gray-500
+              `;
+                return (
+                  <div
+                    key={`${r}-${c}`}
+                    tabIndex={0}
+                    onKeyDown={(e) => onKeyDown(e, r, c)}
+                    onClick={() => setSelected({ r, c })}
+                    className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-lg font-semibold transition ${borderClasses} ${
+                      fixed[r][c]
+                        ? "bg-gray-800 text-gray-200"
+                        : "bg-gray-700 text-white"
+                    } ${
+                      selected && selected.r === r && selected.c === c
+                        ? "ring-2 ring-purple-400"
+                        : ""
+                    } ${
+                      mistakes.has(`${r},${c}`)
+                        ? "bg-red-600/70 ring-2 ring-red-400"
+                        : ""
+                    }`}
+                  >
+                    {fixed[r][c] ? (
+                      val || ""
+                    ) : (
+                      <input
+                        className="w-full h-full text-center bg-transparent outline-none"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={val === 0 ? "" : String(val)}
+                        onChange={(e) => {
+                          const raw = e.target.value.replace(/[^1-9]/g, "");
+                          setCell(r, c, raw ? parseInt(raw, 10) : 0);
+                        }}
+                        onFocus={() => setSelected({ r, c })}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </React.Fragment>
+          ))}
+        </div>
+        <div className="flex gap-3 mt-6">
+          <button
+            onClick={restart}
+            className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 shadow-md"
+          >
+            New Game
+          </button>
+          <button
+            onClick={resetBoard}
+            className="px-4 py-2 rounded-xl bg-yellow-500 hover:bg-yellow-600 shadow-md"
+          >
+            Reset
+          </button>
+          <button
+            onClick={giveHint}
+            className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 shadow-md"
+          >
+            Hint
+          </button>
+          <button
+            onClick={solveNow}
+            className="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 shadow-md"
+          >
+            Solve
+          </button>
+        </div>
+        {won && (
+          <div className="mt-4 text-green-300 font-bold text-xl drop-shadow">
+            🎉 Congratulations! You solved it! 🎉
+          </div>
+        )}
+        <p className="mt-4 text-sm text-gray-200">
+          Click a cell and type 1–9. Use Backspace/Delete to clear. Hint fills
+          one correct cell.
+        </p>
       </div>
-      <div className="flex gap-3 mt-6">
-        <button onClick={restart} className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 shadow-md">New Game</button>
-        <button onClick={resetBoard} className="px-4 py-2 rounded-xl bg-yellow-500 hover:bg-yellow-600 shadow-md">Reset</button>
-        <button onClick={giveHint} className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 shadow-md">Hint</button>
-        <button onClick={solveNow} className="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 shadow-md">Solve</button>
-      </div>
-      {won && <div className="mt-4 text-green-300 font-bold text-xl drop-shadow">🎉 Congratulations! You solved it! 🎉</div>}
-      <p className="mt-4 text-sm text-gray-200">Click a cell and type 1–9. Use Backspace/Delete to clear. Hint fills one correct cell.</p>
     </div>
   );
 }

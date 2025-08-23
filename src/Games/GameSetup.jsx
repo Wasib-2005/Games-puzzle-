@@ -1,5 +1,6 @@
 import { FloatingLabel, Label, Select } from "flowbite-react";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 
 const GameSetup = () => {
@@ -37,9 +38,7 @@ const GameSetup = () => {
         } else if (mode === "Public-Mode") {
           navigate("*");
         } else if (mode === "Private-Mode") {
-          navigate(
-            "*"
-          );
+          navigate("*");
         }
       }, 800);
     }, 350);
@@ -53,6 +52,14 @@ const GameSetup = () => {
           : ""
       } ${pageLoaded ? "" : "-translate-x-[1000px]"}`}
     >
+      <Helmet>
+        <title>GameHub | Mode Selection</title>
+        <meta
+          name="description"
+          content="Welcome to GameHub, select and play your favorite games!"
+        />
+        <meta name="keywords" content="games, Tic Tac Toe, Sudoku, GameHub" />
+      </Helmet>
       <form>
         <div>
           <h4>
